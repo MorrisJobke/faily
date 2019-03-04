@@ -1,6 +1,6 @@
 # faily
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that A GitHub bot that posts parts of the logs of failed CI jobs.
+> A GitHub bot that posts parts of the logs of failed CI jobs.
 
 ## Setup
 
