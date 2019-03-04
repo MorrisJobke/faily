@@ -12,6 +12,13 @@ function run_cmd(cmd, args, callBack ) {
     child.stdout.on('end', function() { callBack (resp) });
 }
 
+const SENTRY_DSN = ''
+
+if (SENTRY_DSN !== '') {
+  const Sentry = require('@sentry/node');
+  Sentry.init({ dsn: SENTRY_DSN });
+}
+
 module.exports = app => {
 
   app.on('status', async context => {
@@ -60,12 +67,14 @@ module.exports = app => {
 
       app.log.debug(statusId + ': I will post ' + body)
 
+      /*
       context.github.issues.createComment({
         owner: 'nextcloud',
         repo: context.payload.repository.name,
         number: prNumber,
         body: body,
       })
+      */
     })
   })
 }
