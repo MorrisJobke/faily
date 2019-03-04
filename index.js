@@ -57,14 +57,12 @@ module.exports = app => {
 
       app.log.warn(statusId + ': I will post following to PR with the number ' + prNumber + ': ' + body)
 
-      /*
       context.github.issues.createComment({
         owner: 'nextcloud',
         repo: context.payload.repository.name,
         number: prNumber,
         body: body,
       })
-      */
     })
   })
 }
