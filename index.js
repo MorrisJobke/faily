@@ -12,15 +12,7 @@ function run_cmd(cmd, args, callBack ) {
     child.stdout.on('end', function() { callBack (resp) });
 }
 
-const SENTRY_DSN = ''
-
-if (SENTRY_DSN !== '') {
-  const Sentry = require('@sentry/node');
-  Sentry.init({ dsn: SENTRY_DSN });
-}
-
 module.exports = app => {
-
   app.on('status', async context => {
     const payload = context.payload
     const statusId = payload.id
@@ -60,12 +52,10 @@ module.exports = app => {
 
     app.log(statusId + ': Found PR number ' + prNumber + ' for branch ' + payload.branches[0].name)
 
-    run_cmd( "php", ["../process.php", droneNumber], function(text) {
-      app.log.debug(text)
-
+    run_cmd( "php", ["../drone-logs/process.php", droneNumber], function(text) {
       const body = '🤖 beep boop beep 🤖\n\nHere are the logs for the failed build:\n\n' + text
 
-      app.log.debug(statusId + ': I will post ' + body)
+      app.log.warn(statusId + ': I will post following to PR with the number ' + prNumber + ': ' + body)
 
       /*
       context.github.issues.createComment({
