@@ -20,18 +20,22 @@ module.exports = app => {
     app.log('Status update ' + statusId + ' is coming in …')
 
     if (payload.state !== 'failure') {
-      app.log.debug(statusId + ': Skipping, because it\'s not a failure')
+      app.log(statusId + ': Skipping, because it\'s not a failure')
       return
     }
 
-    if (payload.context !== 'continuous-integration/drone/pr') {
-      app.log.debug(statusId + ': Skipping, because it\'s not a drone integration')
+    if (payload.context !== 'continuous-integration/drone/pr' && payload.context !== 'continuous-integration/drone/push') {
+      app.log(statusId + ': Skipping, because it\'s not a drone integration')
       return
     }
 
     if (payload.target_url.substring(0, 28) !== 'https://drone.nextcloud.com/') {
       app.log.warning(statusId + ': Skipping, because it\'s not drone.nextcloud.com')
       return
+    }
+
+    if (payload.branches[0] === undefined) {
+      app.log(statusId + ': Skipping, because no branch specified')
     }
 
     const path = payload.target_url.substring(28)
