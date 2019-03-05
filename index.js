@@ -56,10 +56,30 @@ module.exports = app => {
 
     app.log(statusId + ': Found PR number ' + prNumber + ' for branch ' + payload.branches[0].name)
 
+    const comments = await context.github.issues.listComments({
+      owner: 'nextcloud',
+      repo: payload.repository.name,
+      number: prNumber
+    })
+
+    comments.data.forEach((comment) => {
+      if (comment.user.login !== 'faily-bot[bot]') {
+        return
+      }
+
+      app.log(statusId + ': Deleting my comment with the ID ' + comment.id)
+
+      context.github.issues.deleteComment({
+        owner: 'nextcloud',
+        repo: payload.repository.name,
+        comment_id: comment.id
+      })
+    })
+
     run_cmd( "php", ["../drone-logs/process.php", droneNumber], function(text) {
       const body = '🤖 beep boop beep 🤖\n\nHere are the logs for the failed build:\n\n' + text
 
-      app.log.warn(statusId + ': I will post following to PR with the number ' + prNumber + ': ' + body)
+      app.log.warn(statusId + ': I will post following to PR with the number ' + prNumber + ': ' + body.substring(0, 100))
 
       context.github.issues.createComment({
         owner: 'nextcloud',
