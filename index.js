@@ -20,7 +20,7 @@ module.exports = app => {
     app.log('Status update ' + statusId + ' is coming in …')
 
     if (payload.state !== 'failure') {
-      app.log(statusId + ': Skipping, because it\'s not a failure')
+      app.log(statusId + ': Skipping, because it\'s not a failure - it was a ' + payload.state)
       return
     }
 
