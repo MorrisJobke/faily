@@ -4,9 +4,9 @@
   "description": "A GitHub bot that posts parts of the logs of failed CI jobs.",
   "author": "Morris Jobke <hey@morrisjobke.de>",
   "license": "ISC",
-  "repository": "https://github.com//faily.git",
-  "homepage": "https://github.com//faily",
-  "bugs": "https://github.com//faily/issues",
+  "repository": "https://github.com/morrisjobke/faily.git",
+  "homepage": "https://github.com/morrisjobke/faily",
+  "bugs": "https://github.com/morrisjobke/faily/issues",
   "keywords": [
     "probot",
     "github",
