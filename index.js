@@ -19,8 +19,8 @@ module.exports = app => {
 
     app.log('Status update ' + statusId + ' is coming in …')
 
-    if (payload.state !== 'failure') {
-      app.log(statusId + ': Skipping, because it\'s not a failure - it was a ' + payload.state)
+    if (payload.state !== 'failure' && payload.state !== 'success') {
+      app.log(statusId + ': Skipping, because it\'s not a failure nor a success - it was a ' + payload.state)
       return
     }
 
@@ -36,6 +36,7 @@ module.exports = app => {
 
     if (payload.branches[0] === undefined) {
       app.log(statusId + ': Skipping, because no branch specified')
+      return
     }
 
     const path = payload.target_url.substring(28)
@@ -75,6 +76,11 @@ module.exports = app => {
         comment_id: comment.id
       })
     })
+
+    if (payload.state !== 'failure') {
+      app.log(statusId + ': Skipping new comment, because it\'s not a failure - it was a ' + payload.state)
+      return
+    }
 
     run_cmd( "php", ["../drone-logs/process.php", droneNumber], function(text) {
       const body = '🤖 beep boop beep 🤖\n\nHere are the logs for the failed build:\n\n' + text
